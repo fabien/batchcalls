@@ -11,6 +11,11 @@ module.exports = function(callback, options) {
   };
   return function() {
     count++;
+    
+    for (var x = 0; x < arguments.length; x++) {
+      calls[x] = calls[x] ? calls[x].concat(arguments[x]) : [arguments[x]];
+    }
+    
     if ((!options.count && !dispatch) || count === options.count) {
       dispatch = options.wait || !options.count ? setTimeout(execute.bind(this), options.wait || 0) : execute.call(this);
     }
@@ -21,11 +26,6 @@ module.exports = function(callback, options) {
       return args.concat(arg[arg.length - 1]);
     }, []))) {
       execute.call(this);
-    }
-
-
-    for (var x = 0; x < arguments.length; x++) {
-      calls[x] = calls[x] ? calls[x].concat(arguments[x]) : [arguments[x]];
     }
 
   };
